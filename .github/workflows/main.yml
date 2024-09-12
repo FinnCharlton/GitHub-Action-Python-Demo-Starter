@@ -1,0 +1,30 @@
+name: Update the Repo with a new Phrase
+
+on:
+  #Manual Trigger
+  workflow_dispatch:
+
+jobs:
+  refresh_phrase:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout_repo
+      uses: actions/checkout@master
+    - name: install_python
+      uses: actions/setup-python@v4
+      with: 
+        python-version: '3.9.13'
+    - name: install_reqs
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: python_run_main
+      run: python Main.py
+    - name: commit_file
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add corporate_bs.txt
+        git commit -m "Github Actions: Update BS file" || echo "No changes to commit"
+        git push origin || echo "No changes to commit"
+  
